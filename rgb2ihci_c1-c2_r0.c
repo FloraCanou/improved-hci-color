@@ -1,8 +1,8 @@
-/* Copyright 2018 Flora Canou, Alexander Zheng | V. C0-C1 (1.0.1) | RGB to Improved HCI Convertor
+/* Copyright 2018 Flora Canou, Alexander Zheng | V. C1-C2 (1.0.2) | RGB to Improved HCI Convertor
  * This Source Code Form is licensed under the Mozilla Public License, v. 2.0. 
  * If a copy of the MPL was not distributed with this file, you can obtain one at https://mozilla.org/MPL/2.0/. 
  * The program converts an entry in an RGB color space to the corresponding Improved HCI representation. 
- * See Improved RGB Color Space Cylindrical Representation for more info. 
+ * See Improved HCI Color Model Specifications for more info. 
  */
 
 #include <stdio.h>

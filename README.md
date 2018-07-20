@@ -1,2 +1,2 @@
-# Improved HCI Color Model and Conversion Programs
-See _Improved RGB Color Space Cylindrical Representation_ for details. 
+# Improved HCI Color Model Specifications and Conversion Programs
+See _Improved HCI Color Model Specifications_ for details. 
