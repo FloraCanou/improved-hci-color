@@ -1,4 +1,4 @@
-/* Copyright 2018 Flora Canou, Alexander Zheng | V. C3-C3 (1.1.0) | Improved HCI to RGB Convertor
+/* Copyright 2018 Flora Canou, Alexander Zheng | V. C4-1.2.0 | Improved HCI to RGB Convertor
  * This Source Code Form is licensed under the Mozilla Public License, v. 2.0. 
  * If a copy of the MPL was not distributed with this file, you can obtain one at https://mozilla.org/MPL/2.0/. 
  * The program converts an entry in an Improved HCI color model to the corresponding RGB representation. 
@@ -7,33 +7,33 @@
 
 #include <stdio.h>
 #include <math.h>
-#define pi	3.14159265
+#define pi	3.14159265359
 
-void ihciBack (double h, double c, double i, double *p1, double *p2, double *p3)
+void ihciBack (double H, double C, double I, double *p1, double *p2, double *p3)
 {
-	*p1 = i + 2 * c * cos (h) / 3;
-	*p2 = i + 2 * c * cos (h - 2 * pi / 3) / 3;
-	*p3 = i + 2 * c * cos (h - 4 * pi / 3) / 3;
+	*p1 = I + 2*C*cos (H) / 3;
+	*p2 = I + 2*C*cos (H - 2*pi / 3) / 3;
+	*p3 = I + 2*C*cos (H + 2*pi / 3) / 3;
 }
 
 void instruct (void);
 int main (void)
 {
 	instruct();
-	double h, c, i; //hue in degrees, intensity, chroma
+	double H, C, I; //hue in degrees, intensity, chroma
 	double r, g, b; //red, green, blue
 	
 	while (1)
 	{
 		printf ("Please enter the values. > ");
-		scanf ("%lf %lf %lf", &h, &c, &i);
-		if (h == -1 && c == -1 && i == -1)
+		scanf ("%lf %lf %lf", &H, &C, &I);
+		if (H == -1 && C == -1 && I == -1)
 			return 0;
-		else if (h < 0 || c < 0 || i < 0 || h > 360 || c > 1 || i > 1)
+		else if (H < 0 || C < 0 || I < 0 || H > 360 || C > 1 || I > 1)
 			printf ("Warning: One or more values are out of range. The result may be erroneous. \n");
 		
-		h = h * pi / 180; //degree to radian
-		ihciBack (h, c, i, &r, &g, &b);
+		H = H*pi / 180; //degree to radian
+		ihciBack (H, C, I, &r, &g, &b);
 		printf ("Red\t= %f, \nGreen\t= %f, \nBlue\t= %f. \n", r, g, b);
 	}
 }

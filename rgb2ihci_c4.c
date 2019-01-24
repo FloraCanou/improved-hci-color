@@ -1,4 +1,4 @@
-/* Copyright 2018 Flora Canou, Alexander Zheng | V. C3-C3 (1.1.0) | RGB to Improved HCI Convertor
+/* Copyright 2018 Flora Canou, Alexander Zheng | V. C4-1.2.0 | RGB to Improved HCI Convertor
  * This Source Code Form is licensed under the Mozilla Public License, v. 2.0. 
  * If a copy of the MPL was not distributed with this file, you can obtain one at https://mozilla.org/MPL/2.0/. 
  * The program converts an entry in an RGB color model to the corresponding Improved HCI representation. 
@@ -7,31 +7,25 @@
 
 #include <stdio.h>
 #include <math.h>
-#define pi	3.14159265
+#define pi	3.14159265359
 
-double ihciForth_hue (double p1, double p2, double p3, double c)
+double ihciForth_hue (double p1, double p2, double p3, double C)
 {
-	double h; //hue
-	if (p1 == p2 && p2 == p3) //gray, hue is undefined
-		h = -1;
-	else if (p2 > p3)
-		h = acos ((2 * p1 - p2 - p3) / (2 * c));
-	else if (p2 < p3)
-		h = 2 * pi - acos ((2 * p1 - p2 - p3) / (2 * c));
-	else if (p1 > p2) //p2 == p3 has to be noted separately, otherwise producing error
-		h = 0;
+	double H; //hue
+	if (p1 == p2 && p2 == p3)
+		return -1; //gray, hue is undefined
+	else if (p2 >= p3)
+		H = acos ((2*p1 - p2 - p3) / (2*C));
 	else
-		h = pi;
-	return (h);
+		H = 2*pi - acos ((2*p1 - p2 - p3) / (2*C));
+	return (H);
 }
 
-void ihciForth (double p1, double p2, double p3, double *h, double *c, double *i)
+void ihciForth (double p1, double p2, double p3, double *H, double *C, double *I)
 {
-	double d; //deviation
-	d = sqrt (((p1 - p2)*(p1 - p2) + (p2 - p3)*(p2 - p3) + (p3 - p1)*(p3 - p1)) / 3);
-	*c = d * sqrt (6) / 2;
-	*h = ihciForth_hue (p1, p2, p3, *c);
-	*i = (p1 + p2 + p3) / 3;
+	*C = sqrt (((p1 - p2)*(p1 - p2) + (p2 - p3)*(p2 - p3) + (p3 - p1)*(p3 - p1)) / 2);
+	*H = ihciForth_hue (p1, p2, p3, *C);
+	*I = (p1 + p2 + p3) / 3;
 }
 
 void instruct (void);
@@ -39,7 +33,7 @@ int main (void)
 {
 	instruct();
 	double r, g, b; //red, green, blue
-	double h, c, i; //hue in degrees, intensity, chroma
+	double H, C, I; //hue in degrees, intensity, chroma
 	
 	while (1)
 	{
@@ -50,13 +44,13 @@ int main (void)
 		else if (r < 0 || g < 0 || b < 0 || r > 1 || g > 1 || b > 1)
 			printf ("Warning: One or more values are out of range. The result may be erroneous. \n");
 		
-		ihciForth (r, g, b, &h, &c, &i);
-		if (h == -1)
-			printf ("Hue is undefined, \nChroma\t\t= %f, \nIntensity\t= %f. \n", c, i);
+		ihciForth (r, g, b, &H, &C, &I);
+		if (H == -1)
+			printf ("Hue is undefined, \nChroma\t\t= %f, \nIntensity\t= %f. \n", C, I);
 		else
 		{
-			h = h * 180 / pi; //radian to degree
-			printf ("Hue\t\t= %f degrees, \nChroma\t\t= %f, \nIntensity\t= %f. \n", h, c, i);
+			H = H*180 / pi; //radian to degree
+			printf ("Hue\t\t= %f degrees, \nChroma\t\t= %f, \nIntensity\t= %f. \n", H, C, I);
 		}
 	}
 }
