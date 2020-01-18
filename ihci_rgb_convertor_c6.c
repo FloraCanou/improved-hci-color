@@ -1,4 +1,4 @@
-/* Copyright 2018-2019 Flora Canou, Alexander Zheng | V. C5-1.3.0 | Improved HCI to RGB Convertor
+/* Copyright 2018-2020 Flora Canou, Alexander Zheng | V. C6-1.4.0 | Improved HCI to RGB Convertor
  * This Source Code Form is licensed under the Mozilla Public License, v. 2.0. 
  * If you have not received a copy of the license, visit https://mozilla.org/MPL/2.0/. 
  * This program converts entries between Improved HCI and RGB color models. 
@@ -8,6 +8,11 @@
 #include <stdio.h>
 #include <math.h>
 #define TAU	6.28318530718 //2*PI
+
+double sq (double base)
+{
+	return (base*base);
+}
 
 double ihciForth_hue (double p1, double p2, double p3, double C)
 {
@@ -23,16 +28,16 @@ double ihciForth_hue (double p1, double p2, double p3, double C)
 
 void ihciForth (double p1, double p2, double p3, double *H, double *C, double *I)
 {
-	*C = sqrt (((p1 - p2)*(p1 - p2) + (p2 - p3)*(p2 - p3) + (p3 - p1)*(p3 - p1)) / 2);
+	*C = sqrt ((sq (p1 - p2) + sq (p2 - p3) + sq (p3 - p1)) / 2);
 	*H = ihciForth_hue (p1, p2, p3, *C);
 	*I = (p1 + p2 + p3) / 3;
 }
 
 void ihciBack (double H, double C, double I, double *p1, double *p2, double *p3)
 {
-	*p1 = I + 2*C * cos (H) / 3;
-	*p2 = I + 2*C * cos (H - TAU / 3) / 3;
-	*p3 = I + 2*C * cos (H + TAU / 3) / 3;
+	*p1 = I + 2*C*cos (H) / 3;
+	*p2 = I + 2*C*cos (H - TAU / 3) / 3;
+	*p3 = I + 2*C*cos (H + TAU / 3) / 3;
 }
 
 void instruct (void);
@@ -41,7 +46,7 @@ int main (void)
 	instruct();
 	int mode = 0;
 	double order[3];
-	double H, C, I; //hue in degrees, intensity, chroma
+	double H, C, I; //hue in degrees, chroma, intensity
 	double r, g, b; //red, green, blue
 	
 	while (1)
